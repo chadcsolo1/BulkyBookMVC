@@ -88,7 +88,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
                 _unitOfWork.Save();
 
-                TempData["Success"] = "Category Updated Successfully!";
+                TempData["success"] = "Cover Type Updated Successfully!";
 
                 return RedirectToAction("Index");
             }
@@ -133,7 +133,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
             _unitOfWork.Save();
 
-            TempData["Success"] = "Cover Type deleted Successfully!";
+            TempData["success"] = "Cover Type deleted Successfully!";
 
             return RedirectToAction("Index");
         }

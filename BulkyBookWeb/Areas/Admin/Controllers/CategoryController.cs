@@ -90,7 +90,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 _unitOfWork.Category.Update(obj);
                 //The changes to the DB are saved with the line of code
                 _unitOfWork.Save();
-                TempData["Success"] = "Category Updated Successfully";
+                TempData["success"] = "Category Updated Successfully";
                 //Redirects the to the Index action where an updated list of categories will be displayed
                 return RedirectToAction("Index");
             }
@@ -132,7 +132,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
             _unitOfWork.Category.Delete(obj);
             _unitOfWork.Save();
-            TempData["Success"] = "Category Deleted Successfully";
+            TempData["success"] = "Category Deleted Successfully";
             return RedirectToAction("Index");
 
 
