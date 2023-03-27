@@ -36,7 +36,9 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
                         </li>
-                       
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Company" asp-action="Index">Company</a>
+                        </li>
                        @*  <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Content Management</a>
                             <div class="dropdown-menu">
@@ -47,6 +49,7 @@
                             </div>
                         </li>*@
                     </ul>
+                    <partial name="_loginPartial"/>
                     @*<form class="d-flex">
                         <input class="form-control me-sm-2" type="search" placeholder="Search">
                         <button class="btn btn-secondary my-2 my-sm-0" type="submit" fdprocessedid="0o31tyj">Search</button>
