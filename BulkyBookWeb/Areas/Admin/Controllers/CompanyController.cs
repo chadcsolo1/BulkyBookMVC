@@ -71,7 +71,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
                     
                     _unitOfWork.Save();
-                    TempData["success"] = "Product Created Successfully";
+                    TempData["success"] = "Company Created Successfully";
                     return RedirectToAction("Index");
 
             }
@@ -93,6 +93,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         {
             //Get Company OBJ based on ID then check if null & if null return Json error
             var obj = _unitOfWork.Company.GetFirstOrDefault(x => x.Id == id);
+
             if (obj == null)
             {
                 return Json(new {success = false,message = "Error while deleting"});
