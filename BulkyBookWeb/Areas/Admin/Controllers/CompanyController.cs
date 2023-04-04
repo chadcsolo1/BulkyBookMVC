@@ -14,7 +14,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
     public class CompanyController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        
 
         public CompanyController(IUnitOfWork unitOfWork)
         {
@@ -24,29 +24,27 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            
+            List<Company> objCompaniesList = _unitOfWork.Company.GetAll().ToList();
 
-            return View();
+            return View(objCompaniesList);
         }
 
         //GET
         public IActionResult Upsert(int? id)
         {
-            Company company = new();
             
-
 
             if (id == null || id == 0)
             {
                 
 
-                return View(company);
+                return View(new Company());
             }
             else
             {
+                Company companyObj = _unitOfWork.Company.GetFirstOrDefault(i => i.Id == id);
                 
-                company = _unitOfWork.Company.GetFirstOrDefault(i => i.Id == id);
-                return View(company);
+                return View(companyObj);
             }
 
             
@@ -83,8 +81,8 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll(int id)
         {
-            var companyList = _unitOfWork.Company.GetAll();
-            return Json(new {data =  companyList});
+            List<Company> objCompanyList = _unitOfWork.Company.GetAll().ToList();
+            return Json(new {data =  objCompanyList});
         }
 
         //POST
