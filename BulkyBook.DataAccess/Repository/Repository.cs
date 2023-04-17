@@ -26,7 +26,7 @@ namespace BulkyBook.DataAccess.Repository
             dbSet.Add(entity);
         }
       
-        //inlcudeProp - "Category,CoverType)"
+        
         public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter=null, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
@@ -44,9 +44,17 @@ namespace BulkyBook.DataAccess.Repository
             return query.ToList();
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null, bool Tracked = true)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query;
+
+            if(Tracked)
+            {
+                query = dbSet;
+            } else
+            {
+                query = dbSet.AsNoTracking();
+            }
 
             query = query.Where(filter);
 
@@ -74,7 +82,7 @@ namespace BulkyBook.DataAccess.Repository
 
         public void RemoveRange(IEnumerable<T> entities)
         {
-            throw new NotImplementedException();
+            dbSet.RemoveRange(entities);
         }
     }
 }

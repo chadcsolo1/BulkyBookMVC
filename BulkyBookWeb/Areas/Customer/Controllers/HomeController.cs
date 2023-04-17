@@ -47,14 +47,14 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             //We need to obtain the ID of the applicationUser
             
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            shoppingCart.ApplicationUserId = claim.Value;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            shoppingCart.ApplicationUserId = userId;
 
             //_unitOfWork.ShoppingCart.Add(shoppingCart);
 
 
             //Retrieve existing cart from DB by finding applicationuserid & productid
-            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.ApplicationUserId == claim.Value && x.ProductId == shoppingCart.ProductId);
+            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.ApplicationUserId == userId && x.ProductId == shoppingCart.ProductId);
 
             //if cartFromDb == null add to the shopping cart else Increment/Decrement from existing cart
             if (cartFromDb == null)
