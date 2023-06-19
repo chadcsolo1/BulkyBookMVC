@@ -27,7 +27,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         public IActionResult Index()
         {
             List<Company> objCompaniesList = _unitOfWork.Company.GetAll().ToList();
-
+            
             return View(objCompaniesList);
         }
 
@@ -79,32 +79,115 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
         }
 
-        #region API CALLS
-        [HttpGet]
-        public IActionResult GetAll(int id)
+
+        //GET
+        public IActionResult Edit(int? id)
         {
-            List<Company> objCompanyList = _unitOfWork.Company.GetAll().ToList();
-            return Json(new {data =  objCompanyList});
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            //var categoryFromDb = _db.Categories.Find(id);
+            //**** These are a couple of options to find the category matching the id parameter entered for theis method.
+            //**** Find() is just the simplest so we used it.
+            var companyFromDbFirst = _unitOfWork.Company.GetFirstOrDefault(u => u.Id == id);
+            //var categoryFromDbSingle = _db.Categories.SingleOrDefault(u => u.Id == id);
+
+            if (companyFromDbFirst == null)
+            {
+                return NotFound();
+            }
+            return View(companyFromDbFirst);
         }
 
         //POST
-        [HttpDelete]
-        public IActionResult Delete(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Company obj)
         {
-            //Get Company OBJ based on ID then check if null & if null return Json error
-            var obj = _unitOfWork.Company.GetFirstOrDefault(x => x.Id == id);
+            
+            if (ModelState.IsValid)
+            {
+                //Opens a seesion with the DB to Update the 'obj' parameter
+                _unitOfWork.Company.Update(obj);
+                //The changes to the DB are saved with the line of code
+                _unitOfWork.Save();
+                TempData["success"] = "Company Updated Successfully";
+                //Redirects the to the Index action where an updated list of categories will be displayed
+                return RedirectToAction("Index");
+            }
+            return View(obj);
+        }
+
+
+        //GET
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            //var categoryFromDb = _db.Categories.Find(id);
+            //**** These are a couple of options to find the category matching the id parameter entered for theis method.
+            //**** Find() is just the simplest so we used it.
+            var companyFromDbFirst = _unitOfWork.Company.GetFirstOrDefault(u => u.Id == id);
+            //var categoryFromDbSingle = _db.Categories.SingleOrDefault(u => u.Id == id);
+            if (companyFromDbFirst == null)
+            {
+                return NotFound();
+            }
+            return View(companyFromDbFirst);
+        }
+
+        //POST
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost(int? id)
+        {
+
+            var obj = _unitOfWork.Company.GetFirstOrDefault(u => u.Id == id);
 
             if (obj == null)
             {
-                return Json(new {success = false,message = "Error while deleting"});
+                return NotFound();
             }
 
-            //Remove company save to DB and return json success message
             _unitOfWork.Company.Delete(obj);
             _unitOfWork.Save();
-            return Json(new {success = true,message = "Delete Successful"});
+            TempData["success"] = "Company Deleted Successfully";
+            return RedirectToAction("Index");
+
+
         }
-        #endregion
+
+        //#region API CALLS
+        //[HttpGet]
+        //public IActionResult GetAll()
+        //{
+        //    var objCompanyList = _unitOfWork.Company.GetAll();
+        //    return Json(new {data =  objCompanyList});
+        //}
+
+        ////POST
+        //[HttpDelete]
+        //public IActionResult Delete(int id)
+        //{
+        //    //Get Company OBJ based on ID then check if null & if null return Json error
+        //    var obj = _unitOfWork.Company.GetFirstOrDefault(x => x.Id == id);
+
+        //    if (obj == null)
+        //    {
+        //        return Json(new {success = false,message = "Error while deleting"});
+        //    }
+
+        //    //Remove company save to DB and return json success message
+        //    _unitOfWork.Company.Delete(obj);
+        //    _unitOfWork.Save();
+        //    return Json(new {success = true,message = "Delete Successful"});
+        //}
+        //#endregion
 
     }
 
